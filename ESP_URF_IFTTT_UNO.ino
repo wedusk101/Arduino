@@ -63,7 +63,7 @@ void loop() {
   dist_cm = pulse_width / 58.0;
   //Serial.print(dist_cm);
   //Serial.print(" cm \n");
-  if(dist_cm < 5)
+  if(dist_cm < 5) // esp8266 should send an HTTP request to maker.ifttt.com
   {
     digitalWrite(2,LOW);
     digitalWrite(4,HIGH);
