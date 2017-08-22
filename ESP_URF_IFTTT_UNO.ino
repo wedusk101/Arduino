@@ -6,7 +6,8 @@ const int TRIG_PIN = 7;
 const int ECHO_PIN = 8;
 
 // Anything over 400 cm (23200 us pulse) is "out of range"
-const unsigned int MAX_DIST = 23200;
+//const unsigned int MAX_DIST = 23200;
+String cmd = "";
 
 void setup() {
   // put your setup code here, to run once:
@@ -29,6 +30,7 @@ void setup() {
 }
 
 void loop() {
+  int i = 0;
   // put your main code here, to run repeatedly:
   if (esp8266.available()) {
     Serial.write(esp8266.read());
@@ -48,12 +50,12 @@ void loop() {
   digitalWrite(TRIG_PIN, LOW);
 
   // Wait for pulse on echo pin
-  while ( digitalRead(ECHO_PIN) == 0 );
+  while(digitalRead(ECHO_PIN) == 0);
 
   // Measure how long the echo pin was held high (pulse width)
   // Note: the micros() counter will overflow after ~70 min
   t1 = micros();
-  while (digitalRead(ECHO_PIN) == 1);
+  while(digitalRead(ECHO_PIN) == 1);
   t2 = micros();
   pulse_width = t2 - t1;
 
@@ -72,11 +74,27 @@ void loop() {
     delay(1000);
     digitalWrite(3,LOW);
     delay(1000);
+    cmd = "GET /trigger/{motion_detected}/with/key/cgSqIa1NrlKwEtyZi5SA07 HTTP/1.1\r\n";
+    cmd += "Host: maker.ifttt.com\r\n\r\n";
+    String startconn = "AT+CIPSTART=\"TCP\",\"maker.ifttt.com\",80\r\n";
+    esp8266.write("AT+CIPSEND=4,");
+    esp8266.write(cmd.length());
+    esp8266.write("\r\n");
+    //int t = i;
+    //i += 64;
+    /*while(i < cmd.length()){
+        esp8266.write(cmd[i]);
+        i++;}*/
+        esp8266.print(startconn);
+        if(Serial.find(">")){
+          esp8266.print(cmd);
+        }
+        esp8266.write("AT+CIPCLOSE");    
   }
   else{
     digitalWrite(3,LOW);
     digitalWrite(2,HIGH);
     digitalWrite(4,LOW);
   }
-  delay(250);  
+  delay(50);  
 }
