@@ -30,7 +30,6 @@ void setup() {
 }
 
 void loop() {
-  int i = 0;
   // put your main code here, to run repeatedly:
   if (esp8266.available()) {
     Serial.write(esp8266.read());
@@ -65,6 +64,9 @@ void loop() {
   dist_cm = pulse_width / 58.0;
   //Serial.print(dist_cm);
   //Serial.print(" cm \n");
+  cmd = "GET /trigger/motion_detected/with/key/cgSqIa1NrlKwEtyZi5SA07 HTTP/1.1\r\n";
+  cmd += "Host: maker.ifttt.com\r\n\r\n";
+  String startconn = "AT+CIPSTART=4,\"TCP\",\"maker.ifttt.com\",80\r\n";
   if(dist_cm < 5) // esp8266 should send an HTTP request to maker.ifttt.com
   {
     digitalWrite(2,LOW);
@@ -74,22 +76,16 @@ void loop() {
     delay(1000);
     digitalWrite(3,LOW);
     delay(1000);
-    cmd = "GET /trigger/{motion_detected}/with/key/cgSqIa1NrlKwEtyZi5SA07 HTTP/1.1\r\n";
-    cmd += "Host: maker.ifttt.com\r\n\r\n";
-    String startconn = "AT+CIPSTART=\"TCP\",\"maker.ifttt.com\",80\r\n";
-    esp8266.write("AT+CIPSEND=4,");
-    esp8266.write(cmd.length());
-    esp8266.write("\r\n");
-    //int t = i;
-    //i += 64;
-    /*while(i < cmd.length()){
-        esp8266.write(cmd[i]);
-        i++;}*/
-        esp8266.print(startconn);
+    esp8266.print(startconn);
+    delay(2000);
+    esp8266.write("AT+CIPSEND=4,93\r\n");
+    sendCmd(cmd);
+    /*esp8266.write(cmd.length()-6);
+    esp8266.write("\r\n");    
         if(Serial.find(">")){
-          esp8266.print(cmd);
-        }
-        esp8266.write("AT+CIPCLOSE");    
+          sendCmd(cmd);
+        }*/
+        //esp8266.write("AT+CIPCLOSE");    
   }
   else{
     digitalWrite(3,LOW);
@@ -97,4 +93,13 @@ void loop() {
     digitalWrite(4,LOW);
   }
   delay(50);  
+}
+
+void sendCmd(String msg)
+{
+  int i = 0;
+  //i += 64;
+  while(i < cmd.length()){
+        esp8266.write(cmd[i]);
+        i++;}
 }
