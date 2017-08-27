@@ -1,6 +1,6 @@
 #include <SoftwareSerial.h>
 
-SoftwareSerial esp8266(10, 11); //RX, TX
+//SoftwareSerial esp8266(10, 11); //RX, TX
 // Pins
 const int TRIG_PIN = 7;
 const int ECHO_PIN = 8;
@@ -18,25 +18,26 @@ void setup() {
   pinMode(3,OUTPUT); // buzzer
   pinMode(2,OUTPUT); // green LED
   pinMode(4,OUTPUT); // red LED
+  pinMode(5,OUTPUT); // ESP INPUT
   Serial.begin(9600);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
-  esp8266.begin(9600);
-  esp8266.write("AT\r\n");
-  delay(2000);
+  //esp8266.begin(9600);
+  //esp8266.write("AT\r\n");
+  //delay(2000);
   Serial.println("SYSTEM READY");
-  esp8266.write("AT+CIPMUX=1\r\n");
+  //esp8266.write("AT+CIPMUX=1\r\n");
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  if (esp8266.available()) {
+  /*if (esp8266.available()) {
     Serial.write(esp8266.read());
   }
   if (Serial.available()) {
     esp8266.write(Serial.read());
-  }
+  }*/
   unsigned long t1;
   unsigned long t2;
   unsigned long pulse_width;
@@ -64,22 +65,23 @@ void loop() {
   dist_cm = pulse_width / 58.0;
   //Serial.print(dist_cm);
   //Serial.print(" cm \n");
-  cmd = "GET /trigger/motion_detected/with/key/cgSqIa1NrlKwEtyZi5SA07 HTTP/1.1\r\n";
-  cmd += "Host: maker.ifttt.com\r\n\r\n";
+  //cmd = "GET /trigger/motion_detected/with/key/cgSqIa1NrlKwEtyZi5SA07 HTTP/1.1\r\n";
+  //cmd += "Host: maker.ifttt.com\r\n\r\n";
   String startconn = "AT+CIPSTART=4,\"TCP\",\"maker.ifttt.com\",80\r\n";
-  if(dist_cm < 5) // esp8266 should send an HTTP request to maker.ifttt.com
+  if(dist_cm < 30) // esp8266 should send an HTTP request to maker.ifttt.com
   {
     digitalWrite(2,LOW);
     digitalWrite(4,HIGH);
+    digitalWrite(5,HIGH);
     digitalWrite(3,HIGH);
     tone(3,2200,1000);
     delay(1000);
     digitalWrite(3,LOW);
     delay(1000);
-    esp8266.print(startconn);
-    delay(2000);
-    esp8266.write("AT+CIPSEND=4,93\r\n");
-    sendCmd(cmd);
+    //esp8266.print(startconn);
+    Serial.print("448\r\n"); // sends this number to the shell script monitoring the serial output
+    //esp8266.write("AT+CIPSEND=4,93\r\n");
+    //sendCmd(cmd);
     /*esp8266.write(cmd.length()-6);
     esp8266.write("\r\n");    
         if(Serial.find(">")){
@@ -91,15 +93,16 @@ void loop() {
     digitalWrite(3,LOW);
     digitalWrite(2,HIGH);
     digitalWrite(4,LOW);
+    digitalWrite(5,LOW);
   }
-  delay(50);  
+  delay(100);  
 }
 
-void sendCmd(String msg)
+/*void sendCmd(String msg)
 {
   int i = 0;
   //i += 64;
   while(i < cmd.length()){
         esp8266.write(cmd[i]);
         i++;}
-}
+}*/
