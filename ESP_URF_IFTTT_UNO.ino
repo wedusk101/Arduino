@@ -5,7 +5,7 @@
 const int TRIG_PIN = 7;
 const int ECHO_PIN = 8;
 
-// Anything over 400 cm (23200 us pulse) is "out of range"
+//Anything over 400 cm (23200 us pulse) is "out of range"
 //const unsigned int MAX_DIST = 23200;
 String cmd = "";
 
@@ -67,7 +67,7 @@ void loop() {
   //Serial.print(" cm \n");
   //cmd = "GET /trigger/motion_detected/with/key/cgSqIa1NrlKwEtyZi5SA07 HTTP/1.1\r\n";
   //cmd += "Host: maker.ifttt.com\r\n\r\n";
-  String startconn = "AT+CIPSTART=4,\"TCP\",\"maker.ifttt.com\",80\r\n";
+  // String startconn = "AT+CIPSTART=4,\"TCP\",\"maker.ifttt.com\",80\r\n";
   if(dist_cm < 30) // esp8266 should send an HTTP request to maker.ifttt.com
   {
     digitalWrite(2,LOW);
