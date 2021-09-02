@@ -72,7 +72,7 @@ void displayList(int* arr)
 {
   Serial.println("Printing the list of integers...");
   
-  for (unsigned int i = 0; i < SIZE; i++)
+  for (unsigned int i = 0; i < SIZE; ++i)
     Serial.println(arr[i]);
 }
 
@@ -80,17 +80,17 @@ void displayList(float* arr)
 {
   Serial.println("Printing the list of floats...");
   
-  for (unsigned int i = 0; i < SIZE; i++)
+  for (unsigned int i = 0; i < SIZE; ++i)
     Serial.println(arr[i], 2);
 }
 
 void multiplyFloat(float *arr)
 {
   float prod = 1.0;
-  for (unsigned long i = 0; i < MAX_LOOP; i++)
+  for (unsigned long i = 0; i < MAX_LOOP; ++i)
   {
     prod = 1.0f;
-    for (unsigned int j = 0; j < SIZE; j++) 
+    for (unsigned int j = 0; j < SIZE; ++j) 
       if (arr[j] > 0.0f)
         prod *= arr[j];
   }
@@ -101,10 +101,10 @@ void multiplyFloat(float *arr)
 void multiplyFixed(int *arr)
 {
   unsigned long prod = 1;
-  for (unsigned long i = 0; i < MAX_LOOP; i++)
+  for (unsigned long i = 0; i < MAX_LOOP; ++i)
   {
     prod = 1;
-    for (unsigned int j = 0; j < SIZE; j++) 
+    for (unsigned int j = 0; j < SIZE; ++j) 
       if (arr[j] > 0)
         prod = mulFixed(prod, arr[j]);
   }
@@ -119,7 +119,7 @@ void setup() {
   Serial.println("Generating random floats...");
 
   randomSeed(analogRead(0));  
-  for (unsigned int i = 0; i < SIZE; i++)
+  for (unsigned int i = 0; i < SIZE; ++i)
     listFloat[i] = random(1, 100) / 10.0f;
 
   displayList(listFloat);
@@ -145,7 +145,7 @@ void setup() {
 
   Serial.println("Processing list...");
 
-  for (unsigned int i = 0; i < SIZE; i++)
+  for (unsigned int i = 0; i < SIZE; ++i)
     listFixed[i] = floatToFixed(listFloat[i]);
 
   displayList(listFixed);
