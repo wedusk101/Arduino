@@ -61,12 +61,12 @@ void loop() {
 
   // Calculate distance in centimeters and inches. The constants
   // are found in the datasheet, and calculated from the assumed speed 
-  //of sound in air at sea level (~340 m/s).
+  // of sound in air at sea level (~340 m/s).
   dist_cm = pulse_width / 58.0;
-  //Serial.print(dist_cm);
-  //Serial.print(" cm \n");
-  //cmd = "GET /trigger/motion_detected/with/key/cgSqIa1NrlKwEtyZi5SA07 HTTP/1.1\r\n";
-  //cmd += "Host: maker.ifttt.com\r\n\r\n";
+  // Serial.print(dist_cm);
+  // Serial.print(" cm \n");
+  // cmd = "GET /trigger/motion_detected/with/key/cgSqIa1NrlKwEtyZi5SA07 HTTP/1.1\r\n";
+  // cmd += "Host: maker.ifttt.com\r\n\r\n";
   // String startconn = "AT+CIPSTART=4,\"TCP\",\"maker.ifttt.com\",80\r\n";
   if(dist_cm < 30) // esp8266 should send an HTTP request to maker.ifttt.com
   {
